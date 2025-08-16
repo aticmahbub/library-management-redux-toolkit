@@ -54,7 +54,7 @@ function Books() {
                             available,
                         } = book;
                         return (
-                            <TableRow>
+                            <TableRow key={_id}>
                                 <TableCell className='font-medium'>
                                     {title}
                                 </TableCell>

@@ -9,16 +9,39 @@ import {
 } from '@/components/ui/form';
 import {Input} from '@/components/ui/input';
 import {Button} from '@/components/ui/button';
-import {useGetBooksQuery} from '@/redux/api/baseApi';
+import {useGetBookQuery, useUpdateBookMutation} from '@/redux/api/baseApi';
 import {useParams} from 'react-router';
+import {useEffect} from 'react';
 
 export default function EditBook() {
-    const {data, error, isLoading} = useGetBooksQuery(undefined);
     const {id} = useParams();
-    const form = useForm();
-    const {_id, title, author, genre, isbn, copies, available} = data.data;
+    const {data, isLoading} = useGetBookQuery(id);
+    const [updateBook] = useUpdateBookMutation();
 
-    const onSubmit: SubmitHandler<FieldValues> = async (values) => {};
+    const form = useForm();
+
+    useEffect(() => {
+        if (data?.data) {
+            form.reset({
+                title: data.data.title,
+                author: data.data.author,
+                genre: data.data.genre,
+                isbn: data.data.isbn,
+                copies: data.data.copies,
+                available: data.data.available,
+                description: data.data.description,
+            });
+        }
+    }, [data, form]);
+
+    if (isLoading) {
+        return <p>Loading...</p>;
+    }
+
+    const onSubmit: SubmitHandler<FieldValues> = async (values) => {
+        const res = await updateBook({id, ...values});
+        console.log(res);
+    };
 
     return (
         <Form {...form}>
@@ -31,7 +54,6 @@ export default function EditBook() {
                             <FormLabel>Title</FormLabel>
                             <FormControl>
                                 <Input
-                                    defaultValue={title}
                                     placeholder='Enter book title'
                                     {...field}
                                 />
@@ -40,6 +62,7 @@ export default function EditBook() {
                         </FormItem>
                     )}
                 />
+
                 <FormField
                     control={form.control}
                     name='author'
@@ -47,16 +70,13 @@ export default function EditBook() {
                         <FormItem>
                             <FormLabel>Author</FormLabel>
                             <FormControl>
-                                <Input
-                                    defaultValue={author}
-                                    placeholder='Author name'
-                                    {...field}
-                                />
+                                <Input placeholder='Author name' {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
+
                 <FormField
                     control={form.control}
                     name='genre'
@@ -73,6 +93,7 @@ export default function EditBook() {
                         </FormItem>
                     )}
                 />
+
                 <FormField
                     control={form.control}
                     name='isbn'
@@ -90,6 +111,7 @@ export default function EditBook() {
                         </FormItem>
                     )}
                 />
+
                 <FormField
                     control={form.control}
                     name='description'
@@ -103,6 +125,7 @@ export default function EditBook() {
                         </FormItem>
                     )}
                 />
+
                 <FormField
                     control={form.control}
                     name='copies'
@@ -120,6 +143,7 @@ export default function EditBook() {
                         </FormItem>
                     )}
                 />
+
                 <FormField
                     control={form.control}
                     name='available'
@@ -127,32 +151,17 @@ export default function EditBook() {
                         <FormItem>
                             <FormLabel>Available</FormLabel>
                             <FormControl>
-                                <Input
+                                <input
                                     type='checkbox'
-                                    placeholder='Available'
-                                    {...field}
+                                    checked={field.value}
+                                    onChange={field.onChange}
                                 />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-                <FormField
-                    control={form.control}
-                    name='author'
-                    render={({field}) => (
-                        <FormItem>
-                            <FormLabel>Title</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder='Enter book title'
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+
                 <Button type='submit'>Submit</Button>
             </form>
         </Form>
