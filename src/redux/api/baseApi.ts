@@ -9,6 +9,9 @@ export const baseApi = createApi({
         getBooks: builder.query({
             query: () => '/books',
         }),
+        getBook: builder.query({
+            query: (id) => `/books/${id}`,
+        }),
         createBook: builder.mutation({
             query: (book) => ({
                 url: '/books',
@@ -19,4 +22,5 @@ export const baseApi = createApi({
     }),
 });
 
-export const {useGetBooksQuery, useCreateBookMutation} = baseApi;
+export const {useGetBooksQuery, useGetBookQuery, useCreateBookMutation} =
+    baseApi;
