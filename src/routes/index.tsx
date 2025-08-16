@@ -24,7 +24,7 @@ export const router = createBrowserRouter([
                 Component: BorrowSummary,
             },
             {
-                path: '/books/:id',
+                path: '/book/:id',
                 Component: SingleBook,
             },
             {
