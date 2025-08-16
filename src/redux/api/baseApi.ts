@@ -5,9 +5,11 @@ export const baseApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:3000/api',
     }),
+    tagTypes: ['Books'],
     endpoints: (builder) => ({
         getBooks: builder.query({
             query: () => '/books',
+            providesTags: ['Books'],
         }),
         getBook: builder.query({
             query: (id) => `/books/${id}`,
@@ -26,6 +28,13 @@ export const baseApi = createApi({
                 body: patch,
             }),
         }),
+        deleteBook: builder.mutation({
+            query: (id) => ({
+                url: `/books/${id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Books'], // ✅ auto refresh after delete
+        }),
     }),
 });
 
@@ -34,4 +43,5 @@ export const {
     useGetBookQuery,
     useCreateBookMutation,
     useUpdateBookMutation,
+    useDeleteBookMutation,
 } = baseApi;

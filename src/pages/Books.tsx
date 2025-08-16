@@ -1,3 +1,5 @@
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faCircle} from '@fortawesome/free-solid-svg-icons';
 import {useGetBooksQuery} from '@/redux/api/baseApi';
 import {
     Table,
@@ -11,9 +13,13 @@ import {
 import type {IBook} from '@/types';
 import {Button} from '@/components/ui/button';
 import {Link} from 'react-router';
+import DeleteBookModal from '@/components/modules/DeleteBookModal';
+import BorrowBookSheet from '@/components/modules/BorrowBookDrawer';
+import EditBookDrawer from '@/components/modules/EditBookSheet';
 function Books() {
     const {data, error, isLoading} = useGetBooksQuery(undefined);
     console.log(data);
+
     if (isLoading) {
         return <p>Loading books...</p>;
     }
@@ -66,27 +72,27 @@ function Books() {
                                 <TableCell className='text-right'>
                                     {copies}
                                 </TableCell>
-                                <TableCell>{available}</TableCell>
+                                <TableCell>
+                                    {available ? (
+                                        <FontAwesomeIcon
+                                            className='text-green-500'
+                                            icon={faCircle}
+                                        />
+                                    ) : (
+                                        <FontAwesomeIcon
+                                            className='text-red-500'
+                                            icon={faCircle}
+                                        />
+                                    )}
+                                </TableCell>
                                 <TableCell className='flex gap-5'>
                                     <Button>
                                         <Link to={`/book/${_id}`}>View</Link>
                                     </Button>
-                                    <Button>
-                                        {' '}
-                                        <Link to={`/edit-book/${_id}`}>
-                                            Edit
-                                        </Link>
-                                    </Button>
-                                    <Button>
-                                        {' '}
-                                        <Link to={`/delete-book/${_id}`}>
-                                            Delete
-                                        </Link>
-                                    </Button>
-                                    <Button>
-                                        {' '}
-                                        <Link to={`/book/${_id}`}>Borrow</Link>
-                                    </Button>
+                                    <EditBookDrawer />
+
+                                    <DeleteBookModal book={book} />
+                                    <BorrowBookSheet />
                                 </TableCell>
                             </TableRow>
                         );

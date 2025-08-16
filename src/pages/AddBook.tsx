@@ -14,11 +14,10 @@ import {useCreateBookMutation} from '@/redux/api/baseApi';
 export default function AddBook() {
     const form = useForm();
 
-    const [createBook] = useCreateBookMutation();
+    const [createBook, error] = useCreateBookMutation();
     const onSubmit: SubmitHandler<FieldValues> = async (values) => {
         createBook(values);
     };
-
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
