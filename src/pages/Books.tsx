@@ -16,9 +16,9 @@ import {Link} from 'react-router';
 import DeleteBookModal from '@/components/modules/DeleteBookModal';
 import EditBookDrawer from '@/components/modules/EditBookSheet';
 import BorrowBookDrawer from '@/components/modules/BorrowBookDrawer';
+import EditBookSheet from '@/components/modules/EditBookSheet';
 function Books() {
     const {data, error, isLoading} = useGetBooksQuery(undefined);
-    console.log(data);
 
     if (isLoading) {
         return <p>Loading books...</p>;
@@ -89,7 +89,7 @@ function Books() {
                                     <Button>
                                         <Link to={`/book/${_id}`}>View</Link>
                                     </Button>
-                                    <EditBookDrawer />
+                                    <EditBookSheet book={book} />
 
                                     <DeleteBookModal book={book} />
                                     <BorrowBookDrawer book={book} />

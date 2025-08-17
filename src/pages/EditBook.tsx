@@ -15,7 +15,9 @@ import {useEffect} from 'react';
 
 export default function EditBook() {
     const {id} = useParams();
+    console.log(id);
     const {data, isLoading} = useGetBookQuery(id);
+    // console.log(data);
     const [updateBook] = useUpdateBookMutation();
 
     const form = useForm();

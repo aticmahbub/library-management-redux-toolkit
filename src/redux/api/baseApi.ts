@@ -27,6 +27,7 @@ export const baseApi = createApi({
                 method: 'PUT',
                 body: patch,
             }),
+            invalidatesTags: ['Books'],
         }),
         borrowBook: builder.mutation({
             query: (borrowData) => ({
