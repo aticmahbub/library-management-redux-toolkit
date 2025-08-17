@@ -8,31 +8,39 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import {useGetBorrowQuery} from '@/redux/api/baseApi';
 
 export default function BorrowSummary() {
-    let invoice = mk;
+    const {data, isLoading, error} = useGetBorrowQuery(undefined);
+    const smth = data?.data.map((item) => item.book);
+    console.log(smth);
+    if (isLoading) {
+        return <p>Loading books...</p>;
+    }
+
+    if (error) {
+        return <p>Error fetching books</p>;
+    }
     return (
         <Table>
-            <TableCaption>A list of your recent invoices.</TableCaption>
+            <TableCaption>A list of borrowed books.</TableCaption>
             <TableHeader>
                 <TableRow>
-                    <TableHead className='w-[100px]'>Invoice</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Method</TableHead>
-                    <TableHead className='text-right'>Amount</TableHead>
+                    <TableHead className='w-[100px]'>Title</TableHead>
+                    <TableHead>ISBN</TableHead>
+                    <TableHead>Borrowed</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
-                <TableRow key={invoice.invoice}>
-                    <TableCell className='font-medium'>
-                        {invoice.invoice}
-                    </TableCell>
-                    <TableCell>{invoice.paymentStatus}</TableCell>
-                    <TableCell>{invoice.paymentMethod}</TableCell>
-                    <TableCell className='text-right'>
-                        {invoice.totalAmount}
-                    </TableCell>
-                </TableRow>
+                {data.data.map((book) => (
+                    <TableRow key={book._id}>
+                        <TableCell className='font-medium'>
+                            {book?.book.title}
+                        </TableCell>
+                        <TableCell>{book?.book.isbn}</TableCell>
+                        <TableCell>{book?.totalQuantity}</TableCell>
+                    </TableRow>
+                ))}
             </TableBody>
             <TableFooter>
                 <TableRow>

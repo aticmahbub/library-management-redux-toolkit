@@ -7,6 +7,16 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form';
+
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import {Input} from '@/components/ui/input';
 import {Button} from '@/components/ui/button';
 import {useCreateBookMutation} from '@/redux/api/baseApi';
@@ -14,9 +24,10 @@ import {useCreateBookMutation} from '@/redux/api/baseApi';
 export default function AddBook() {
     const form = useForm();
 
-    const [createBook, error] = useCreateBookMutation();
+    const [createBook, data] = useCreateBookMutation();
     const onSubmit: SubmitHandler<FieldValues> = async (values) => {
         createBook(values);
+        console.log({values, data});
     };
     return (
         <Form {...form}>
@@ -57,15 +68,40 @@ export default function AddBook() {
                         <FormItem>
                             <FormLabel>Genre</FormLabel>
                             <FormControl>
-                                <Input
-                                    placeholder='Enter book genre'
-                                    {...field}
-                                />
+                                <Select
+                                    onValueChange={field.onChange}
+                                    value={field.value}
+                                >
+                                    <SelectTrigger className='w-[180px]'>
+                                        <SelectValue placeholder='Select a genre' />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectLabel>Genre</SelectLabel>
+                                            <SelectItem value='FICTION'>
+                                                Fiction
+                                            </SelectItem>
+                                            <SelectItem value='NON_FICTION'>
+                                                NON_FICTION
+                                            </SelectItem>
+                                            <SelectItem value='SCIENCE'>
+                                                Science
+                                            </SelectItem>
+                                            <SelectItem value='HISTORY'>
+                                                History
+                                            </SelectItem>
+                                            <SelectItem value='BIOGRAPHY'>
+                                                Biography
+                                            </SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
+
                 <FormField
                     control={form.control}
                     name='isbn'
@@ -117,35 +153,22 @@ export default function AddBook() {
                     control={form.control}
                     name='available'
                     render={({field}) => (
-                        <FormItem>
-                            <FormLabel>Available</FormLabel>
+                        <FormItem className='flex items-center gap-2'>
                             <FormControl>
-                                <Input
+                                <input
                                     type='checkbox'
-                                    placeholder='Available'
-                                    {...field}
+                                    checked={field.value}
+                                    onChange={(e) =>
+                                        field.onChange(e.target.checked)
+                                    }
                                 />
                             </FormControl>
+                            <FormLabel>Available</FormLabel>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-                <FormField
-                    control={form.control}
-                    name='author'
-                    render={({field}) => (
-                        <FormItem>
-                            <FormLabel>Title</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder='Enter book title'
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+
                 <Button type='submit'>Submit</Button>
             </form>
         </Form>

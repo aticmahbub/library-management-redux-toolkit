@@ -14,7 +14,6 @@ import type {IBook} from '@/types';
 import {Button} from '@/components/ui/button';
 import {Link} from 'react-router';
 import DeleteBookModal from '@/components/modules/DeleteBookModal';
-import EditBookDrawer from '@/components/modules/EditBookSheet';
 import BorrowBookDrawer from '@/components/modules/BorrowBookDrawer';
 import EditBookSheet from '@/components/modules/EditBookSheet';
 function Books() {
