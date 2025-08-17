@@ -14,8 +14,8 @@ import type {IBook} from '@/types';
 import {Button} from '@/components/ui/button';
 import {Link} from 'react-router';
 import DeleteBookModal from '@/components/modules/DeleteBookModal';
-import BorrowBookSheet from '@/components/modules/BorrowBookDrawer';
 import EditBookDrawer from '@/components/modules/EditBookSheet';
+import BorrowBookDrawer from '@/components/modules/BorrowBookDrawer';
 function Books() {
     const {data, error, isLoading} = useGetBooksQuery(undefined);
     console.log(data);
@@ -92,7 +92,7 @@ function Books() {
                                     <EditBookDrawer />
 
                                     <DeleteBookModal book={book} />
-                                    <BorrowBookSheet />
+                                    <BorrowBookDrawer book={book} />
                                 </TableCell>
                             </TableRow>
                         );

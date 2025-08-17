@@ -28,12 +28,20 @@ export const baseApi = createApi({
                 body: patch,
             }),
         }),
+        borrowBook: builder.mutation({
+            query: (borrowData) => ({
+                url: '/borrow',
+                method: 'PUT',
+                body: borrowData,
+            }),
+            invalidatesTags: ['Books'],
+        }),
         deleteBook: builder.mutation({
             query: (id) => ({
                 url: `/books/${id}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: ['Books'], // ✅ auto refresh after delete
+            invalidatesTags: ['Books'],
         }),
     }),
 });
@@ -44,4 +52,5 @@ export const {
     useCreateBookMutation,
     useUpdateBookMutation,
     useDeleteBookMutation,
+    useBorrowBookMutation,
 } = baseApi;
