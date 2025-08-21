@@ -40,6 +40,9 @@ function EditBookSheet({book}: IBookProps) {
         },
     });
 
+    const copies = form.watch('copies');
+    const isAvailable = Number(copies) > 0;
+
     useEffect(() => {
         if (data?.data) {
             const {title, author, genre, isbn, copies, available, description} =
@@ -60,7 +63,15 @@ function EditBookSheet({book}: IBookProps) {
 
     const onSubmit: SubmitHandler<IBook> = async (values) => {
         try {
-            const res = await updateBook({id, ...values}).unwrap();
+            const copies = Number(values.copies);
+
+            const payload = {
+                ...values,
+                copies,
+                available: copies > 0,
+            };
+
+            const res = await updateBook({id, ...payload}).unwrap();
             console.log('Updated book:', res);
         } catch (err) {
             console.error('Update failed:', err);
@@ -196,26 +207,17 @@ function EditBookSheet({book}: IBookProps) {
                             )}
                         />
 
-                        {/* Available Checkbox */}
-                        <FormField
-                            control={form.control}
-                            name='available'
-                            render={({field}) => (
-                                <FormItem className='flex items-center space-x-2'>
-                                    <FormLabel>Available</FormLabel>
-                                    <FormControl>
-                                        <input
-                                            type='checkbox'
-                                            checked={!!field.value}
-                                            onChange={(e) =>
-                                                field.onChange(e.target.checked)
-                                            }
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                        {/* Available */}
+                        <FormItem className='flex items-center space-x-2'>
+                            <FormLabel>Available</FormLabel>
+                            <FormControl>
+                                <input
+                                    type='checkbox'
+                                    checked={isAvailable}
+                                    disabled
+                                />
+                            </FormControl>
+                        </FormItem>
 
                         <SheetFooter>
                             <Button type='submit'>Save changes</Button>

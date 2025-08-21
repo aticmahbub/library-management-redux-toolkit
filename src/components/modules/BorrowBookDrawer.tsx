@@ -49,7 +49,7 @@ function BorrowBookDrawer({book}: IBookProps) {
 
     const onSubmit: SubmitHandler<IBorrowForm> = (data) => {
         const borrowData = {
-            id: book?._id,
+            book: book?._id,
             quantity: borrowCount,
             dueDate: data?.dueDate,
         };
