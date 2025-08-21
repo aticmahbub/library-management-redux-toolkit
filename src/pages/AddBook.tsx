@@ -1,4 +1,4 @@
-import {useForm, type SubmitHandler, type FieldValues} from 'react-hook-form';
+import {useForm, type SubmitHandler} from 'react-hook-form';
 import {
     Form,
     FormControl,
@@ -23,25 +23,27 @@ import toast, {Toaster} from 'react-hot-toast';
 import {Spinner} from '@/components/ui/shadcn-io/spinner';
 import {useNavigate} from 'react-router';
 import {Textarea} from '@/components/ui/textarea';
+import type {IBook} from '@/types';
+import type {FetchBaseQueryError} from '@reduxjs/toolkit/query';
 
 export default function AddBook() {
     const navigate = useNavigate();
 
-    const form = useForm({
+    const form = useForm<IBook>({
         defaultValues: {
             title: '',
             author: '',
-            genre: '',
+            genre: 'NONE',
             isbn: '',
             description: '',
-            copies: '',
+            copies: 0,
             available: true,
         },
     });
 
     const [createBook, {isLoading}] = useCreateBookMutation();
 
-    const onSubmit: SubmitHandler<FieldValues> = async (values) => {
+    const onSubmit: SubmitHandler<IBook> = async (values) => {
         try {
             const result = await createBook(values).unwrap();
             toast.success(result.message);
@@ -50,9 +52,10 @@ export default function AddBook() {
             setTimeout(() => {
                 navigate('/books');
             }, 1000);
-        } catch (error: any) {
-            console.error(error?.data?.error?.message);
-            toast.error(error?.data?.error?.message || 'Failed to create book');
+        } catch (err) {
+            const error = err as FetchBaseQueryError;
+            console.log(error);
+            toast.error('Failed to create book');
         }
     };
 

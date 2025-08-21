@@ -10,7 +10,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet';
-import {useForm, type FieldValues, type SubmitHandler} from 'react-hook-form';
+import {useForm, type SubmitHandler} from 'react-hook-form';
 import {
     Form,
     FormControl,
@@ -21,17 +21,18 @@ import {
 } from '@/components/ui/form';
 import {useGetBookQuery, useUpdateBookMutation} from '@/redux/api/baseApi';
 import {useEffect} from 'react';
+import type {IBook, IBookProps} from '@/types';
 
-function EditBookSheet({book}) {
+function EditBookSheet({book}: IBookProps) {
     const id = book?._id;
     const {data, isLoading} = useGetBookQuery(id);
     const [updateBook] = useUpdateBookMutation();
 
-    const form = useForm({
+    const form = useForm<IBook>({
         defaultValues: {
             title: '',
             author: '',
-            genre: '',
+            genre: 'NONE',
             isbn: '',
             copies: 0,
             available: false,
@@ -57,7 +58,7 @@ function EditBookSheet({book}) {
 
     if (isLoading) return <p>Loading...</p>;
 
-    const onSubmit: SubmitHandler<FieldValues> = async (values) => {
+    const onSubmit: SubmitHandler<IBook> = async (values) => {
         try {
             const res = await updateBook({id, ...values}).unwrap();
             console.log('Updated book:', res);

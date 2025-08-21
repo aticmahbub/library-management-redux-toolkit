@@ -21,18 +21,18 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form';
-import {useForm} from 'react-hook-form';
+import {useForm, type SubmitHandler} from 'react-hook-form';
 import {cn} from '@/lib/utils';
 import {format} from 'date-fns';
 import {useBorrowBookMutation} from '@/redux/api/baseApi';
+import type {IBookProps} from '@/types';
 
-function BorrowBookDrawer({book}) {
-    const [borrowBook, {error}] = useBorrowBookMutation();
-    const form = useForm({
-        defaultValues: {
-            dueDate: null,
-        },
-    });
+function BorrowBookDrawer({book}: IBookProps) {
+    const [borrowBook] = useBorrowBookMutation();
+    interface IBorrowForm {
+        dueDate: Date | undefined;
+    }
+    const form = useForm<IBorrowForm>();
     const [borrowCount, setBorrowCount] = useState(0);
 
     const increment = () => {
@@ -47,14 +47,14 @@ function BorrowBookDrawer({book}) {
         }
     };
 
-    const onSubmit = (data) => {
+    const onSubmit: SubmitHandler<IBorrowForm> = (data) => {
         const borrowData = {
-            id: book._id,
+            id: book?._id,
             quantity: borrowCount,
-            dueDate: data.dueDate,
+            dueDate: data?.dueDate,
         };
+        console.log(borrowData);
         borrowBook(borrowData);
-        console.log({borrowData, data, error});
     };
 
     return (
@@ -108,11 +108,11 @@ function BorrowBookDrawer({book}) {
                                 </Button>
                             </div>
 
-                            {/* Due date (required) */}
+                            {/* Due date  */}
                             <FormField
                                 control={form.control}
                                 name='dueDate'
-                                rules={{required: 'Due date is required'}} // ✅ required rule
+                                rules={{required: 'Due date is required'}}
                                 render={({field}) => (
                                     <FormItem className='flex flex-col mb-6'>
                                         <FormLabel>Due date</FormLabel>
@@ -153,7 +153,7 @@ function BorrowBookDrawer({book}) {
                                                 />
                                             </PopoverContent>
                                         </Popover>
-                                        <FormMessage /> {/* ✅ shows error */}
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />

@@ -9,11 +9,11 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import {useGetBorrowQuery} from '@/redux/api/baseApi';
+import type {IBorrow} from '@/types';
 
 export default function BorrowSummary() {
     const {data, isLoading, error} = useGetBorrowQuery(undefined);
-    const smth = data?.data.map((item) => item.book);
-    console.log(smth);
+    console.log(data);
     if (isLoading) {
         return <p>Loading books...</p>;
     }
@@ -32,8 +32,8 @@ export default function BorrowSummary() {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {data.data.map((book) => (
-                    <TableRow key={book._id}>
+                {data.data.map((book: IBorrow) => (
+                    <TableRow key={book.book.isbn}>
                         <TableCell className='font-medium'>
                             {book?.book.title}
                         </TableCell>
@@ -42,12 +42,7 @@ export default function BorrowSummary() {
                     </TableRow>
                 ))}
             </TableBody>
-            <TableFooter>
-                <TableRow>
-                    <TableCell colSpan={3}>Total</TableCell>
-                    <TableCell className='text-right'>$2,500.00</TableCell>
-                </TableRow>
-            </TableFooter>
+            <TableFooter></TableFooter>
         </Table>
     );
 }

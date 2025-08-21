@@ -1,3 +1,4 @@
+import {Spinner} from '@/components/ui/shadcn-io/spinner';
 import {
     Table,
     TableBody,
@@ -8,13 +9,23 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import {useGetBookQuery} from '@/redux/api/baseApi';
+import type {IBook} from '@/types';
 import {useParams} from 'react-router';
+
 function Book() {
     const {id} = useParams();
-    const {data, isLoading} = useGetBookQuery(id);
+    const {data, isLoading, error} = useGetBookQuery(id);
     if (isLoading) {
-        return <p>Loading</p>;
+        return (
+            <div className='flex justify-center py-10'>
+                <Spinner variant='bars' size={64} />
+            </div>
+        );
     }
+    if (error) return <p>Failed to fetch book</p>;
+
+    const book: IBook | undefined = data?.data;
+    if (!book) return <p>Book not found</p>;
     const {title, author, genre, isbn, copies, available} = data.data;
     return (
         <Table>
@@ -36,7 +47,9 @@ function Book() {
                     <TableCell>{genre}</TableCell>
                     <TableCell className='text-right'>{isbn}</TableCell>
                     <TableCell className='text-right'>{copies}</TableCell>
-                    <TableCell className='text-right'>{available}</TableCell>
+                    <TableCell className='text-right'>
+                        {available ? 'Yes' : 'No'}
+                    </TableCell>
                 </TableRow>
             </TableBody>
         </Table>

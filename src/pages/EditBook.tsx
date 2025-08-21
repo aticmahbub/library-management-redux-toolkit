@@ -1,4 +1,4 @@
-import {useForm, type FieldValues, type SubmitHandler} from 'react-hook-form';
+import {useForm, type SubmitHandler} from 'react-hook-form';
 import {
     Form,
     FormControl,
@@ -12,26 +12,39 @@ import {Button} from '@/components/ui/button';
 import {useGetBookQuery, useUpdateBookMutation} from '@/redux/api/baseApi';
 import {useParams} from 'react-router';
 import {useEffect} from 'react';
+import type {IBook} from '@/types';
+
+type BookFormValues = Omit<IBook, '_id'>;
 
 export default function EditBook() {
-    const {id} = useParams();
-    console.log(id);
+    const {id} = useParams<{id: string}>();
     const {data, isLoading} = useGetBookQuery(id);
-    // console.log(data);
     const [updateBook] = useUpdateBookMutation();
 
-    const form = useForm();
+    const form = useForm<BookFormValues>({
+        defaultValues: {
+            title: '',
+            author: '',
+            genre: 'NONE',
+            isbn: '',
+            copies: 0,
+            available: false,
+            description: '',
+        },
+    });
 
     useEffect(() => {
         if (data?.data) {
+            const {title, author, genre, isbn, copies, available, description} =
+                data.data;
             form.reset({
-                title: data.data.title,
-                author: data.data.author,
-                genre: data.data.genre,
-                isbn: data.data.isbn,
-                copies: data.data.copies,
-                available: data.data.available,
-                description: data.data.description,
+                title,
+                author,
+                genre,
+                isbn,
+                copies,
+                available,
+                description,
             });
         }
     }, [data, form]);
@@ -40,14 +53,19 @@ export default function EditBook() {
         return <p>Loading...</p>;
     }
 
-    const onSubmit: SubmitHandler<FieldValues> = async (values) => {
-        const res = await updateBook({id, ...values});
-        console.log(res);
+    const onSubmit: SubmitHandler<BookFormValues> = async (values) => {
+        try {
+            const res = await updateBook({id, ...values}).unwrap();
+            console.log('Book updated:', res);
+        } catch (err) {
+            console.error('Update failed:', err);
+        }
     };
 
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+                {/* Title */}
                 <FormField
                     control={form.control}
                     name='title'
@@ -65,6 +83,7 @@ export default function EditBook() {
                     )}
                 />
 
+                {/* Author */}
                 <FormField
                     control={form.control}
                     name='author'
@@ -79,6 +98,7 @@ export default function EditBook() {
                     )}
                 />
 
+                {/* Genre */}
                 <FormField
                     control={form.control}
                     name='genre'
@@ -96,6 +116,7 @@ export default function EditBook() {
                     )}
                 />
 
+                {/* ISBN */}
                 <FormField
                     control={form.control}
                     name='isbn'
@@ -104,7 +125,7 @@ export default function EditBook() {
                             <FormLabel>ISBN</FormLabel>
                             <FormControl>
                                 <Input
-                                    type='number'
+                                    type='text'
                                     placeholder='Enter book ISBN'
                                     {...field}
                                 />
@@ -114,6 +135,7 @@ export default function EditBook() {
                     )}
                 />
 
+                {/* Description */}
                 <FormField
                     control={form.control}
                     name='description'
@@ -128,6 +150,7 @@ export default function EditBook() {
                     )}
                 />
 
+                {/* Copies */}
                 <FormField
                     control={form.control}
                     name='copies'
@@ -146,6 +169,7 @@ export default function EditBook() {
                     )}
                 />
 
+                {/* Available */}
                 <FormField
                     control={form.control}
                     name='available'
@@ -156,7 +180,9 @@ export default function EditBook() {
                                 <input
                                     type='checkbox'
                                     checked={field.value}
-                                    onChange={field.onChange}
+                                    onChange={(e) =>
+                                        field.onChange(e.target.checked)
+                                    }
                                 />
                             </FormControl>
                             <FormMessage />

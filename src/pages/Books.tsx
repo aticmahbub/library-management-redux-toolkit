@@ -16,11 +16,20 @@ import {Link} from 'react-router';
 import DeleteBookModal from '@/components/modules/DeleteBookModal';
 import BorrowBookDrawer from '@/components/modules/BorrowBookDrawer';
 import EditBookSheet from '@/components/modules/EditBookSheet';
-function Books() {
-    const {data, error, isLoading} = useGetBooksQuery(undefined);
+import {Spinner} from '@/components/ui/shadcn-io/spinner';
 
+function Books() {
+    const {data, error, isLoading} = useGetBooksQuery(undefined) as {
+        data?: {data: IBook[]};
+        error?: unknown;
+        isLoading: boolean;
+    };
     if (isLoading) {
-        return <p>Loading books...</p>;
+        return (
+            <div className='flex justify-center py-10'>
+                return <Spinner variant='bars' size={64} />
+            </div>
+        );
     }
 
     if (error) {
@@ -48,7 +57,7 @@ function Books() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {data.data.map((book: IBook) => {
+                    {data?.data.map((book: IBook) => {
                         const {
                             _id,
                             title,

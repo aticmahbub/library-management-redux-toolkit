@@ -1,5 +1,5 @@
 function BorrowBook() {
-    return <div>Borrow</div>;
+    return <div>Borrow Book</div>;
 }
 
 export default BorrowBook;

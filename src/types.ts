@@ -8,9 +8,25 @@ export interface IBook {
         | 'SCIENCE'
         | 'HISTORY'
         | 'BIOGRAPHY'
-        | 'FANTASY';
+        | 'FANTASY'
+        | 'NONE';
     isbn: string;
     description: string;
     copies: number;
     available: boolean;
+}
+
+export type TBorrow = {
+    isbn: number;
+    title: string;
+};
+export interface IBorrow extends IBook {
+    quantity: number;
+    dueDate: Date | null;
+    totalQuantity: number;
+    book: TBorrow;
+    _id: string;
+}
+export interface IBookProps {
+    book: IBook;
 }
