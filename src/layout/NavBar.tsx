@@ -19,7 +19,10 @@ function NavBar() {
                 <NavigationMenu>
                     <NavigationMenuList>
                         {navLinks.map((link) => (
-                            <NavigationMenuItem key={link.href}>
+                            <NavigationMenuItem
+                                className='poppins-regular'
+                                key={link.href}
+                            >
                                 <NavigationMenuLink asChild>
                                     <NavLink to={link.href}>
                                         {link.title}

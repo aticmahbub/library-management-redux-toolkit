@@ -13,7 +13,7 @@ import type {IBorrow} from '@/types';
 
 export default function BorrowSummary() {
     const {data, isLoading, error} = useGetBorrowQuery(undefined);
-    console.log(data);
+    // console.log(data);
     if (isLoading) {
         return <p>Loading books...</p>;
     }

@@ -26,8 +26,12 @@ import {cn} from '@/lib/utils';
 import {format} from 'date-fns';
 import {useBorrowBookMutation} from '@/redux/api/baseApi';
 import type {IBookProps} from '@/types';
+import {useNavigate} from 'react-router';
+import type {FetchBaseQueryError} from '@reduxjs/toolkit/query';
+import toast from 'react-hot-toast';
 
 function BorrowBookDrawer({book}: IBookProps) {
+    const navigate = useNavigate();
     const [borrowBook] = useBorrowBookMutation();
     interface IBorrowForm {
         dueDate: Date | undefined;
@@ -47,14 +51,30 @@ function BorrowBookDrawer({book}: IBookProps) {
         }
     };
 
-    const onSubmit: SubmitHandler<IBorrowForm> = (data) => {
-        const borrowData = {
-            book: book?._id,
-            quantity: borrowCount,
-            dueDate: data?.dueDate,
-        };
-        console.log(borrowData);
-        borrowBook(borrowData);
+    const onSubmit: SubmitHandler<IBorrowForm> = async (data) => {
+        if (borrowCount <= 0) {
+            toast.error('Please select at least 1 copy to borrow');
+            return;
+        }
+
+        try {
+            const borrowData = {
+                book: book?._id,
+                quantity: borrowCount,
+                dueDate: data?.dueDate,
+            };
+
+            await borrowBook(borrowData).unwrap();
+
+            toast.success('Book borrowed successfully');
+            navigate('/borrow-summary');
+            form.reset();
+            setBorrowCount(0);
+        } catch (err) {
+            const error = err as FetchBaseQueryError;
+            console.log(error);
+            toast.error('Failed to borrow book');
+        }
     };
 
     return (
