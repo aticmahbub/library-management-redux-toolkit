@@ -22,4 +22,3 @@ This project includes a **NavBar, Hero section, dynamic routing with React Route
 
 ---
 
-## 📂 Project Structure
