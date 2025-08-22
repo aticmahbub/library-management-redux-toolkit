@@ -1,11 +1,12 @@
 import {Hero34} from '@/components/hero34';
-import Books from './Books';
+
+import BooksCarousel from '@/components/modules/BooksCarousel';
 
 function Home() {
     return (
         <div>
             <Hero34 />
-            <Books />
+            <BooksCarousel />
         </div>
     );
 }

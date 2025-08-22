@@ -1,7 +1,7 @@
 function Footer() {
     return (
         <footer>
-            <p>
+            <p className='text-center'>
                 &copy; {new Date().getFullYear()} BookHub. All rights reserved.
             </p>
         </footer>
