@@ -16,7 +16,7 @@ function NavBar() {
     ];
 
     return (
-        <header className='w-[1440px] h-[90px] flex items-center justify-between px-[80px]'>
+        <header className='w-[1440px] h-[80px] flex items-center justify-between px-[80px]'>
             <NavLink to='/' className='flex items-center gap-2'>
                 <img
                     src={logo}
