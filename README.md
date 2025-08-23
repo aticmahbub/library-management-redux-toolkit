@@ -57,6 +57,12 @@ The goal of this project is to implement a functional **application** with core 
 1. **Clone repo**
    ```bash
    git clone https://github.com/aticmahbub/library-management-rtk-query.git
+2. **Change directory**
+   ```bash
    cd library-management-rtk-query 
+3. **Install dependencies**
+   ```bash
    npm install 
+4. **Run development server**
+   ```bash
    npm run dev
