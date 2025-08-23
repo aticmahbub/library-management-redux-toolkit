@@ -30,12 +30,8 @@ The goal of this project is to implement a functional **application** with core 
 
 ### 3. Borrow Book
 - Borrow form with:
-  - Quantity (≤ available copies).
-  - Due date (date picker).
-- Logic:
-  - Copies update after borrow.
-  - If copies = 0 → book marked unavailable.
-- Redirects to **Borrow Summary** page after success.
+  - Quantity
+  - Due date
 
 ### 4. Borrow Summary 
 - Aggregated list of borrowed books.
@@ -61,7 +57,6 @@ The goal of this project is to implement a functional **application** with core 
 1. **Clone repo**
    ```bash
    git clone https://github.com/aticmahbub/library-management-rtk-query.git
-   cd library-management-rtk-query
-  npm install
-  npm run dev
-```
+   cd library-management-rtk-query 
+   npm install 
+   npm run dev
